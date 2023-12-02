@@ -1,4 +1,4 @@
-enum PERMISSION {
+export enum PERMISSION {
   read = 2,
   edit = 4,
   delete = 8,
@@ -7,7 +7,7 @@ enum PERMISSION {
   admin = 2 ** 10,
 }
 
-const createPermission = (permissions: PERMISSION[]) => {
+export const createPermission = (permissions: PERMISSION[]) => {
   let finalPermissionValue = 1;
 
   permissions.forEach((permission) => {
@@ -17,26 +17,30 @@ const createPermission = (permissions: PERMISSION[]) => {
   return finalPermissionValue;
 };
 
-const hasPermission = (value: number, actionType: ActionType) => {
+export const hasPermission = (value: number) => {
   const readPermission = createPermission([PERMISSION.read]);
   const editPermission = createPermission([PERMISSION.edit]);
   const adminPermission = createPermission([PERMISSION.admin]);
   const deletePermission = createPermission([PERMISSION.delete]);
 
-  switch (actionType) {
-    case ActionType.READ:
-      return value === readPermission;
+  const permission = {
+    canRead: false,
+    canEdit: false,
+    canDelete: false,
+    admin: false,
+  };
 
-    case ActionType.EDIT:
-      return value === editPermission;
-
-    case ActionType.DELETE:
-      return value === deletePermission;
-
-    case ActionType.ADMIN:
-      return value === adminPermission;
-
-    default:
-      return false;
+  if (value === readPermission) {
+    permission.canRead = true;
+  } else if (value === editPermission) {
+    permission.canEdit = true;
+    permission.canRead = true;
+  } else if (value === deletePermission) {
+    permission.canRead = true;
+    permission.canDelete = true;
+  } else if (value === adminPermission) {
+    permission.admin = true;
   }
+
+  return permission;
 };

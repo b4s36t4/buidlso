@@ -6,9 +6,9 @@ const UserSchema = new Schema(
     lastName: String,
     roles: [{ type: Schema.Types.ObjectId, ref: "Role" }],
     email: String,
-    password: String,
+    password: { type: String, select: false },
   },
   { timestamps: true }
 );
 
-export const User = model("Role", UserSchema);
+export const User = model("User", UserSchema);

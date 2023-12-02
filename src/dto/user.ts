@@ -23,3 +23,10 @@ export const UpdateUser = z.object({
 });
 
 export type IUpdateUser = z.infer<typeof UpdateUser>;
+
+export const LoginUser = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+export type ILoginUser = z.infer<typeof LoginUser>;

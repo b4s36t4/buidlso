@@ -1,10 +1,11 @@
-import { Model, Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 const PermissionSchema = new Schema(
   {
     resource: String,
     value: Number,
-    name: String,
+    name: { type: String, enum: ["read", "update", "delete", "admin"] },
+    createdBy: { type: Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
