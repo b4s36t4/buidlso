@@ -4,7 +4,7 @@ const PermissionSchema = new Schema(
   {
     resource: String,
     value: Number,
-    name: { type: String, enum: ["read", "update", "delete", "admin"] },
+    name: { type: String, enum: ["read", "edit", "delete", "admin", "manage"] },
     createdBy: { type: Types.ObjectId, ref: "User" },
   },
   { timestamps: true }

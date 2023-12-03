@@ -4,6 +4,7 @@ import { connect } from "./db/connection";
 import { ZodSchema } from "zod";
 import AuthPlugin from "./routes/auth";
 import PrivateRoutes from "./routes/private";
+import mongoose from "mongoose";
 
 // Load the .env variables into process
 dotenv.config();
@@ -22,20 +23,26 @@ app.setValidatorCompiler<ZodSchema>(({ schema }) => {
   };
 });
 
+app.addHook("onClose", async () => {
+  await mongoose.disconnect()
+})
+
 app.register(AuthPlugin);
 
 app.register(PrivateRoutes);
 
-async function main() {
+export async function main() {
   const address = await app.listen({ port: Number(port), host });
   console.log("Starting server");
   await connect();
   console.log("Connected to Database");
   // Start any other services here itself
   console.log(`Server started at => ${address}`);
-}
 
-main();
+  await app.ready()
+
+  return { address, app }
+}
 
 // app.listen({ port: Number(port), host: host }, async (error, address) => {
 //   if (error) {

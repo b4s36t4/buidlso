@@ -56,6 +56,9 @@ const PermissionPlugin: FastifyPluginAsync = async (fastify, options) => {
           permission = PERMISSION.read;
           break;
 
+        case "manage":
+          permission = PERMISSION.manage
+          break;
         default: {
           permission = PERMISSION.read;
         }
@@ -79,7 +82,6 @@ const PermissionPlugin: FastifyPluginAsync = async (fastify, options) => {
   );
 
   fastify.get("/permissions", { preHandler: async (req, res) => await checkPermission(req, res, ActionType.ADMIN, "permissions") }, async (req, res) => {
-    console.log("hi?")
     const { page, page_size } = (req.params ?? {}) as { page: number, page_size: number }
     const permissions = await Permission.find().limit(page_size).skip(page_size * page)
     return permissions

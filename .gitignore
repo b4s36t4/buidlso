@@ -2,3 +2,7 @@ node_modules
 log.txt
 .vscode/
 .env
+.test.env
+
+# test report files
+html
