@@ -8,7 +8,7 @@ import { ActionType } from "../../type";
 
 const PermissionPlugin: FastifyPluginAsync = async (fastify, options) => {
   fastify.addHook("preHandler", async (req, res) => {
-    const { resource } = req.body as any;
+    const { resource } = req.body ?? {} as any;
 
     if (!resource) return;
 
@@ -77,6 +77,13 @@ const PermissionPlugin: FastifyPluginAsync = async (fastify, options) => {
       });
     }
   );
+
+  fastify.get("/permissions", { preHandler: async (req, res) => await checkPermission(req, res, ActionType.ADMIN, "permissions") }, async (req, res) => {
+    console.log("hi?")
+    const { page, page_size } = (req.params ?? {}) as { page: number, page_size: number }
+    const permissions = await Permission.find().limit(page_size).skip(page_size * page)
+    return permissions
+  })
 };
 
 export default PermissionPlugin;

@@ -2,6 +2,8 @@ import { FastifyPluginAsync } from "fastify";
 import { Role, User } from "../../models";
 import { IUpdateRoles, UpdateRoles } from "../../dto/roles";
 import { Types } from "mongoose";
+import { ActionType } from "../../type";
+import { checkPermission } from "../../functions/checkPermission";
 
 const UserPlugin: FastifyPluginAsync = async (app) => {
   app.get("/me", async (req, res) => {
@@ -23,6 +25,19 @@ const UserPlugin: FastifyPluginAsync = async (app) => {
 
     return res.send({ message: "success", data: user });
   });
+
+  app.post("/validate", {
+    preHandler: async (req, res) => {
+      const { action, resource } = req.body as { action: ActionType, resource: string }
+      if (!action || !resource) {
+        return res.status(400).send({ "message": "Invalid body", status: "error" })
+      }
+
+      return checkPermission(req, res, action, resource)
+    }
+  }, async (req, res) => {
+    return res.status(200).send({ "message": "Allowed", status: "success" })
+  })
 
   app.patch(
     "/user/roles",

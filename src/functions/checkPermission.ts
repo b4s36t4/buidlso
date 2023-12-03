@@ -46,11 +46,15 @@ export const checkPermission = async (
     if (action === ActionType.READ && permission.canRead) {
       return;
     }
-    if (action === ActionType.EDIT && permission.canEdit) {
+    if (action === ActionType.EDIT && (permission.canEdit)) {
       return;
     }
 
     if (action === ActionType.DELETE && permission.canDelete) {
+      return;
+    }
+
+    if (action === ActionType.MANAGE && permission.canDelete && permission.canRead && permission.canEdit) {
       return;
     }
   }

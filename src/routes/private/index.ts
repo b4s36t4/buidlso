@@ -39,8 +39,7 @@ declare module "fastify" {
 }
 
 const PrivateRoutes: FastifyPluginAsync = async (app) => {
-  // register user plugin
-
+  // Provide user as a property in the request object
   app.decorateRequest("user", null);
 
   app.addHook("preHandler", async (req, res) => {
@@ -48,7 +47,7 @@ const PrivateRoutes: FastifyPluginAsync = async (app) => {
 
     if (!token) {
       return res
-        .status(403)
+        .status(401)
         .send({ message: "Unauthenticated", status: "error" });
     }
 
@@ -70,15 +69,18 @@ const PrivateRoutes: FastifyPluginAsync = async (app) => {
       req.user = user;
     } catch (err) {
       return res
-        .status(400)
+        .status(403)
         .send({ message: "Invalid token", status: "error" });
     }
   });
 
+  // User related Routes
   app.register(UserPlugin);
 
+  // Role related routes
   app.register(RolePlugin);
 
+  // Permission related routes
   app.register(PermissionPlugin);
 };
 

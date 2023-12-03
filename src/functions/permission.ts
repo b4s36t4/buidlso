@@ -2,6 +2,7 @@ export enum PERMISSION {
   read = 2,
   edit = 4,
   delete = 8,
+  manage = 16,
 
   // Max-number to differ from other permissions
   admin = 2 ** 10,
@@ -22,6 +23,7 @@ export const hasPermission = (value: number) => {
   const editPermission = createPermission([PERMISSION.edit]);
   const adminPermission = createPermission([PERMISSION.admin]);
   const deletePermission = createPermission([PERMISSION.delete]);
+  const managePermission = createPermission([PERMISSION.manage])
 
   const permission = {
     canRead: false,
@@ -38,6 +40,10 @@ export const hasPermission = (value: number) => {
   } else if (value === deletePermission) {
     permission.canRead = true;
     permission.canDelete = true;
+  } else if (value === managePermission) {
+    permission.canRead = true
+    permission.canEdit = true
+    permission.canDelete = true
   } else if (value === adminPermission) {
     permission.admin = true;
   }
