@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "tsx src/app.ts",
-    "dev": "tsx watch src/app.ts",
+    "start": "tsx watch src/app.ts",
     "test": "vitest run --no-threads --reporter=html",
-    "coverage":"vite preview --outDir html"
+    "coverage": "vite preview --outDir html"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Mahesh Vagicherla",
+  "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.5",
